@@ -1,11 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ESNEXT",
+    "target": "ESNext",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "rootDir": "./src/app/"
-  }
+    "rootDir": ".",
+    "outDir": "."
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./src/app/components"
+    },
+    {
+      "path": "./src/app/layouts"
+    },
+    // {
+    //   "path": "./src"
+    // }
+  ]
 }

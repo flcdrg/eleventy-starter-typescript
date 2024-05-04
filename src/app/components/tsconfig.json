@@ -1,0 +1,7 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "../../_js/components",
+        "composite": true
+    },
+}

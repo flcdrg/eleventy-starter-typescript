@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": ".",
+        "composite": true
+    },
+    "include": ["*.ts"],
+    "exclude": []
+}

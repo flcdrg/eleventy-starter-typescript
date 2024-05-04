@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "../../_js/layouts",
+        "composite": true
+    },
+    "references": [
+        {
+            "path": "../components"
+        }
+    ]
+}
