@@ -2,6 +2,7 @@
 module.exports = function(config) {
   config.addPassthroughCopy({ public: './' })
 
+
   config.setBrowserSyncConfig({
     files: ['dist/**/*'],
   })

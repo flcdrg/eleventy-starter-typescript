@@ -7,7 +7,7 @@
   "author": "eszter <ekov@pm.me>",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist src/_js",
+    "clean": "rimraf dist src/_js _site",
     "build": "npm-run-all clean build:ts build:11ty",
     "dev": "npm-run-all clean build:ts -p watch:* -- --watch",
     "build:11ty": "eleventy --quiet",
