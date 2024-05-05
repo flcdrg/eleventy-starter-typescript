@@ -7,8 +7,10 @@ module.exports = function(config) {
     files: ['dist/**/*'],
   })
 
-  config.addAsyncFilter('getFullYear', async function (date) {
-    return date.getFullYear();
+  config.addPassthroughCopy('*.css');
+  config.addAsyncFilter('formatDate', async function (date) {
+    // format as dd mmm yyyy
+    return date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
   });
 
   return {

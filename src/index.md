@@ -10,7 +10,7 @@ Check out the [blog](/blog) too!
 
   {% for post in collections.posts | reverse %}
 
-{{ post.date | getFullYear }}
+{{ post.date | formatDate }}
 ## <a href="{{ post.url | url }}">{{ post.data.title }}</a>
 
 {{ post.content }}
