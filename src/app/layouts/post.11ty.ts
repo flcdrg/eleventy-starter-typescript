@@ -8,11 +8,12 @@ interface BlogPostProps {
 exports.data = {
   layout: 'base.11ty.js',
   permalink: function (data: any) {
-    return `/${data.page.date.getFullYear()}/${this.slug(data.title)}.html`;
+    const date: Date = data.page.date;
+    const month = new Intl.DateTimeFormat('en', { month: "2-digit" }).format(date);
+    const year = date.getFullYear();
+    return `/${year}/${month}/${this.slug(data.title)}.html`;
   }
 }
-
-exports.permalink = ({ page }: BlogPostProps) => `/blog/${page.fileSlug}.html`
 
 exports.render = ({ title, page, content }: BlogPostProps) => `
   <a href="/blog">Back</a>

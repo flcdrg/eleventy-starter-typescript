@@ -7,6 +7,10 @@ module.exports = function(config) {
     files: ['dist/**/*'],
   })
 
+  config.addAsyncFilter('getFullYear', async function (date) {
+    return date.getFullYear();
+  });
+
   return {
     templateFormats: ['md', 'njk', 'jpg', 'png', 'gif'],
     dir: {
