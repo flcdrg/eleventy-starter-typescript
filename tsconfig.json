@@ -9,7 +9,9 @@
     "rootDir": ".",
     "outDir": "."
   },
-  "files": [],
+  "files": [
+    ".eleventy.ts",
+  ],
   "references": [
     {
       "path": "./src/app/components"
@@ -17,8 +19,8 @@
     {
       "path": "./src/app/layouts"
     },
-    // {
-    //   "path": "./src"
-    // }
+    {
+      "path": "./src"
+    }
   ]
 }

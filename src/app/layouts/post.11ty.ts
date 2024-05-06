@@ -8,7 +8,7 @@ interface BlogPostProps {
 exports.data = {
   layout: 'base.11ty.js',
   permalink: function (data: any) {
-    console.log(JSON.stringify(data, null, 2));
+    //console.log(JSON.stringify(data, null, 2));
 
     const date: Date = data.page.date;
     const month = new Intl.DateTimeFormat('en', { month: "2-digit" }).format(date);

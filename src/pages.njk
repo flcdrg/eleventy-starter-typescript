@@ -1,0 +1,35 @@
+---
+pagination:
+  data: collections._postsByYear
+  size: 1
+  alias: item
+permalink: /{{ item.key | slugify }}/{% if item.pageNumber > 1 %}page/{{ item.pageNumber }}/index.html{% endif %}
+layout: "base.11ty.js"
+---
+
+<h1>Posts from {{ item.key }}</h1>
+{% for post in item.posts %}
+    <article>
+        <h1 itemprop="name">
+            <a class="archive-article-title" href="{{ post.url }}">{{ post.data.title }}</a>
+        </h1>
+        <p>
+            {{ post.templateContent | excerpt | safe }}
+        </p>
+    </article>
+{% endfor %}
+
+{% if item.totalPages > 1 %}
+<div class="post-list-pager">
+    <span>Page: </span>
+{% for i in range(0, item.totalPages) -%}
+    <span>
+        {%- if (i + 1) != item.pageNumber %}
+        <a href="/blog/{{ item.key }}/{% if i != 0 %}page/{{ i + 1}}{% endif %}">{{ i + 1 }}</a>
+        {%- else %}
+        {{ i + 1 }}
+        {%- endif %}
+    </span>
+{%- endfor %}
+</div>
+{% endif %}
