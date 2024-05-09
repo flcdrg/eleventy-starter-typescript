@@ -16,3 +16,11 @@ Check out the [blog](/blog) too!
 {{ post.content }}
 
   {% endfor %}
+
+### Archive
+
+{% for year in collections._postsByYear %}
+
+- <a href="/{{ year.key }}">{{ year.key }}</a>
+
+{% endfor %}

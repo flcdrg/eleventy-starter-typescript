@@ -18,7 +18,7 @@ module.exports = function (eleventyConfig: UserConfig) {
   });
 
   eleventyConfig.addCollection("_postsByYear", (collectionApi: { getFilteredByTag: (arg0: string) => any[]; }) => {
-    let postsByKey:any = {};
+    let postsByKey: any = {};
     collectionApi.getFilteredByTag("posts").forEach(post => {
       let key = post.date.getFullYear();
 
@@ -29,7 +29,13 @@ module.exports = function (eleventyConfig: UserConfig) {
       postsByKey[key].push(post);
     });
 
-    let postsByKeyPaged: Array<any> = [];
+    let postsByKeyPaged: Array<{
+      key: string;
+      posts: any;
+      pageNumber: number;
+      totalPages: number;
+    }> = [];
+
     for (let key in postsByKey) {
       postsByKey[key].sort((a: { date: number; }, b: { date: number; }) => a.date > b.date).reverse();
 
@@ -49,7 +55,7 @@ module.exports = function (eleventyConfig: UserConfig) {
   });
 
   // https://www.martingunnarsson.com/posts/eleventy-excerpts/
-  eleventyConfig.addFilter("excerpt", function (content: any) {
+  eleventyConfig.addFilter("excerpt", function (content: string) {
     return new ExcerptGenerator().getExcerpt(content, 500);
   });
 

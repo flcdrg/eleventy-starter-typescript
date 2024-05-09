@@ -1,7 +1,7 @@
 // https://www.martingunnarsson.com/posts/eleventy-excerpts/
 export class ExcerptGenerator {
     constructor() { }
-    getExcerpt(content, length) {
+    getExcerpt(content: string, length: number) {
         let excerptParagraphs = [];
         let currentLength = 0;
         const paragraphs = content.match(/<p>.*?<\/p>/gs) || [];
