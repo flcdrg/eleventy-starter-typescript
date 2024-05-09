@@ -1,13 +1,18 @@
 # eleventy-starter-typescript
 
-An unopinionated, minimal starter with TypeScript templates.
+Based on <https://github.com/eszterkv/eleventy-starter-typescript>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fc0derabbit%2Feleventy-starter-typescript&project-name=eleventy-typescript&repo-name=eleventy-typescript)
 
-## FAQ
+## Updated Packages
 
-Just kidding, nobody has asked anything yet, this is fresh out of the oven. 🔥
+This project uses updated packages including TypeScript (`^5.4.5`) and Eleventy (`^2.0.1`) as listed in the `package.json`. These updates enhance the development experience and performance of the project.
 
-### Where are the styles? Tests? Rollup?…
+## Transition to TypeScript
 
-I figured if you want to use 11ty with TypeScript, you’re big enough to choose your own tools.
+The configuration for `.eleventy.js` has been transitioned to TypeScript, allowing for type-safe configuration and better development practices. The configuration can be found in `.eleventy.ts`, which outlines the setup and options used for generating the site.
+
+## Site Output Structure
+
+The site output structure is designed to closely mirror my existing Jekyll-based blog, generated layout like /yyyy/mm/post-title.html etc.
+
+
