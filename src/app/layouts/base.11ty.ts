@@ -64,6 +64,10 @@ module.exports = function ({
 
       </aside>
     </div>
+    <footer>
+      <p>&copy; ${new Date().getFullYear()} David Gardiner</p>
+
+    </footer>
     </body>
   </html>
 `;
