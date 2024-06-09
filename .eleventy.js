@@ -18,16 +18,16 @@ module.exports = function (eleventyConfig) {
     });
     eleventyConfig.addCollection("_postsByYear", (collectionApi) => {
         let postsByKey = {};
-        collectionApi.getFilteredByTag("posts").forEach(post => {
-            let key = post.date.getFullYear();
+        collectionApi.getFilteredByTag("posts").forEach((post) => {
+            const key = post.date.getFullYear();
             if (!postsByKey[key]) {
                 postsByKey[key] = [];
             }
             postsByKey[key].push(post);
         });
-        let postsByKeyPaged = [];
+        const postsByKeyPaged = [];
         for (let key in postsByKey) {
-            postsByKey[key].sort((a, b) => a.date > b.date).reverse();
+            postsByKey[key].sort((a, b) => b.date.getTime() - a.date.getTime()).reverse();
             let totalPages = Math.ceil(postsByKey[key].length / 20);
             lodash_1.default.chunk(postsByKey[key], 20).forEach((posts, index) => {
                 postsByKeyPaged.push({

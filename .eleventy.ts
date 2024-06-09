@@ -1,5 +1,6 @@
 import lodash from 'lodash';
 import { ExcerptGenerator } from './src/_js/excerptGenerator';
+import { Post, PostsByYear } from './src/app/components/types';
 
 import { UserConfig } from '@11ty/eleventy';
 
@@ -18,9 +19,10 @@ module.exports = function (eleventyConfig: UserConfig) {
   });
 
   eleventyConfig.addCollection("_postsByYear", (collectionApi: { getFilteredByTag: (arg0: string) => any[]; }) => {
-    let postsByKey: any = {};
-    collectionApi.getFilteredByTag("posts").forEach(post => {
-      let key = post.date.getFullYear();
+    let postsByKey: {[id: string]: Post[] } = {};
+
+    collectionApi.getFilteredByTag("posts").forEach((post:Post) => {
+      const key = post.date.getFullYear();
 
       if (!postsByKey[key]) {
         postsByKey[key] = [];
@@ -29,15 +31,10 @@ module.exports = function (eleventyConfig: UserConfig) {
       postsByKey[key].push(post);
     });
 
-    let postsByKeyPaged: Array<{
-      key: string;
-      posts: any;
-      pageNumber: number;
-      totalPages: number;
-    }> = [];
+    const postsByKeyPaged: PostsByYear = [];
 
     for (let key in postsByKey) {
-      postsByKey[key].sort((a: { date: number; }, b: { date: number; }) => a.date > b.date).reverse();
+      postsByKey[key].sort((a, b) => b.date.getTime() - a.date.getTime()).reverse();
 
       let totalPages = Math.ceil(postsByKey[key].length / 20);
 

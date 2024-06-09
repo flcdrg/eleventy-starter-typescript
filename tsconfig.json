@@ -10,7 +10,7 @@
     "outDir": "."
   },
   "files": [
-    ".eleventy.ts",
+    ".eleventy.ts"
   ],
   "references": [
     {
