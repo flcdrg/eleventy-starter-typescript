@@ -1,5 +1,5 @@
 import navigation from '../components/navigation'
-import { PostsByYear } from '../components/types';
+import { Categories, PostsByYear } from '../components/types';
 
 interface PageProps {
   title: string;
@@ -14,6 +14,17 @@ const defaultDescription = 'TypeScript starter for Eleventy'
 module.exports = function ({
   title, content, lang = 'en', description = defaultDescription, collections
 }: PageProps) {
+
+  const categories = collections.categories as Categories;
+
+  const categoriesList =
+  Object.keys(categories)
+    // sort by category name
+    .sort((a, b) => a.localeCompare(b))
+    .map((category) => 
+      `<li><a href="/tags/${category}">${category} (${categories[category]})</a></li>`
+    ).join('');
+  
   return `
   <!doctype html>
   <html lang="${lang}">
@@ -33,6 +44,8 @@ module.exports = function ({
         ${content}
       </main>
       <aside class="right-sidebar">
+        <h3>Blog archive</h3>
+        <ul>
         ${
           (collections._postsByYear as PostsByYear)
           // sort by year descending
@@ -42,6 +55,13 @@ module.exports = function ({
           `)
           .join('')
         }
+        </ul>
+
+        <h3>Tags</h3>
+        <ul>
+          ${categoriesList}
+        </ul>
+
       </aside>
     </div>
     </body>

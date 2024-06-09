@@ -5,7 +5,7 @@ title: Dave's Daydreams
 
 # Dave's Daydreams
 
-{% for post in collections.posts %}
+{% for post in collections._recentPosts %}
 
 {{ post.date | formatDate }}
 

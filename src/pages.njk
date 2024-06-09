@@ -8,11 +8,13 @@ layout: "base.11ty.js"
 ---
 
 <h1>Posts from {{ item.key }}</h1>
+
 {% for post in item.posts %}
     <article>
-        <h1 itemprop="name">
+        <p>{{ post.date | formatDate | safe }}</p>
+        <h2 itemprop="name">
             <a class="archive-article-title" href="{{ post.url }}">{{ post.data.title }}</a>
-        </h1>
+        </h2>
         <p>
             {{ post.templateContent | excerpt | safe }}
         </p>

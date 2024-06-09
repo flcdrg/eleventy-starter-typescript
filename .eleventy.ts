@@ -1,6 +1,6 @@
 import lodash from 'lodash';
 import { ExcerptGenerator } from './src/_js/excerptGenerator';
-import { Post, PostsByYear } from './src/app/components/types';
+import { Categories, Post, PostsByYear } from './src/app/components/types';
 
 import { UserConfig } from '@11ty/eleventy';
 
@@ -15,13 +15,27 @@ module.exports = function (eleventyConfig: UserConfig) {
   eleventyConfig.addPassthroughCopy('*.css');
   eleventyConfig.addAsyncFilter('formatDate', async function (date: Date) {
     // format as dd mmm yyyy
-    return date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
+
+    const formattedDate = date.toLocaleString('default', { weekday: 'long' }) + ' ' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
+
+    return `<time datetime="${date.toISOString()}">${formattedDate}</time>`;
   });
 
-  eleventyConfig.addCollection("_postsByYear", (collectionApi: { getFilteredByTag: (arg0: string) => any[]; }) => {
-    let postsByKey: {[id: string]: Post[] } = {};
+  type CollectionApi = {
+    getAll(): any[];
+    getFilteredByTag: (arg0: string) => any[];
+  };
 
-    collectionApi.getFilteredByTag("posts").forEach((post:Post) => {
+  eleventyConfig.addCollection("_recentPosts", (collectionApi: CollectionApi) => {
+
+    return collectionApi.getFilteredByTag("posts").sort((a: Post, b: Post) => b.date.getTime() - a.date.getTime());
+  });
+
+
+  eleventyConfig.addCollection("_postsByYear", (collectionApi: CollectionApi) => {
+    let postsByKey: { [id: string]: Post[] } = {};
+
+    collectionApi.getFilteredByTag("posts").forEach((post: Post) => {
       const key = post.date.getFullYear();
 
       if (!postsByKey[key]) {
@@ -49,6 +63,31 @@ module.exports = function (eleventyConfig: UserConfig) {
     }
 
     return postsByKeyPaged;
+  });
+
+  eleventyConfig.addCollection("categories", (collectionApi: CollectionApi) => {
+
+
+
+    const gatheredTags: Categories = {};
+
+    collectionApi.getAll().forEach((item) => {
+      if ('tags' in item.data) {
+        (item.data.tags as string[])
+          .filter((tag: string) => tag !== 'posts')
+          .forEach((tag: string) => {
+
+          if (!gatheredTags[tag]) {
+            gatheredTags[tag] = 1;
+          }
+          else {
+            gatheredTags[tag] += 1;
+          }
+        });
+      }
+    });
+
+    return gatheredTags;
   });
 
   // https://www.martingunnarsson.com/posts/eleventy-excerpts/

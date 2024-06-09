@@ -43,3 +43,18 @@ code {
 		width: calc((100% / 3 * 2));
 	}
 }
+
+/* Tooltip for elements with datetime attribute */
+[datetime]:hover::after {
+	display: block;
+	position: absolute;
+	content: attr(datetime);
+	border: 1px solid black;
+	background: #eee;
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+  }
+
+time {
+	color: grey;
+}

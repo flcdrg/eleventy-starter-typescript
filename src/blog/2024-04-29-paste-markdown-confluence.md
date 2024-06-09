@@ -4,6 +4,7 @@ date: '2024-04-29T10:30:00.000+09:30'
 image: /assets/2024/04/confluence-paste-options.png
 tags:
 - Software
+- PowerShell
 ---
 
 This is one of those blog posts which is mainly for my benefit 😀.

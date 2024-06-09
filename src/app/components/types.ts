@@ -1,10 +1,15 @@
 export type Post = {
-    date: Date;
-  };
+  date: Date;
+};
 
 export type PostsByYear = Array<{
-    key: string;
-    posts: Array<Post>;
-    pageNumber: number;
-    totalPages: number;
-  }>;
+  key: string;
+  posts: Array<Post>;
+  pageNumber: number;
+  totalPages: number;
+}>;
+
+
+export type Categories = {
+  [id: string]: number;
+};

@@ -17,8 +17,6 @@ junit.xml
 # Code editors
 .vscode
 .idea
-tags
-tags.*
 
 # Env
 .env

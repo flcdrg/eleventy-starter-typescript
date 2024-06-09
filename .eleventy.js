@@ -14,7 +14,11 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy('*.css');
     eleventyConfig.addAsyncFilter('formatDate', async function (date) {
         // format as dd mmm yyyy
-        return date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
+        const formattedDate = date.toLocaleString('default', { weekday: 'long' }) + ' ' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
+        return `<time datetime="${date.toISOString()}">${formattedDate}</time>`;
+    });
+    eleventyConfig.addCollection("_recentPosts", (collectionApi) => {
+        return collectionApi.getFilteredByTag("posts").sort((a, b) => b.date.getTime() - a.date.getTime());
     });
     eleventyConfig.addCollection("_postsByYear", (collectionApi) => {
         let postsByKey = {};
@@ -39,6 +43,24 @@ module.exports = function (eleventyConfig) {
             });
         }
         return postsByKeyPaged;
+    });
+    eleventyConfig.addCollection("categories", (collectionApi) => {
+        const gatheredTags = {};
+        collectionApi.getAll().forEach((item) => {
+            if ('tags' in item.data) {
+                item.data.tags
+                    .filter((tag) => tag !== 'posts')
+                    .forEach((tag) => {
+                    if (!gatheredTags[tag]) {
+                        gatheredTags[tag] = 1;
+                    }
+                    else {
+                        gatheredTags[tag] += 1;
+                    }
+                });
+            }
+        });
+        return gatheredTags;
     });
     // https://www.martingunnarsson.com/posts/eleventy-excerpts/
     eleventyConfig.addFilter("excerpt", function (content) {
