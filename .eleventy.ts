@@ -4,6 +4,8 @@ import { Categories, Post, PostsByYear } from './src/app/components/types';
 
 import { UserConfig } from '@11ty/eleventy';
 
+const pluginRss = require("@11ty/eleventy-plugin-rss");
+
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 module.exports = function (eleventyConfig: UserConfig) {
   eleventyConfig.addPassthroughCopy({ public: './' })
@@ -19,6 +21,11 @@ module.exports = function (eleventyConfig: UserConfig) {
     const formattedDate = date.toLocaleString('default', { weekday: 'long' }) + ' ' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
 
     return `<time datetime="${date.toISOString()}">${formattedDate}</time>`;
+  });
+
+  // filter to exclude 'posts' tag
+  eleventyConfig.addFilter('excludePostsTag', (tags: string[]) => {
+    return tags.filter(tag => tag !== 'posts');
   });
 
   type CollectionApi = {
@@ -77,13 +84,13 @@ module.exports = function (eleventyConfig: UserConfig) {
           .filter((tag: string) => tag !== 'posts')
           .forEach((tag: string) => {
 
-          if (!gatheredTags[tag]) {
-            gatheredTags[tag] = 1;
-          }
-          else {
-            gatheredTags[tag] += 1;
-          }
-        });
+            if (!gatheredTags[tag]) {
+              gatheredTags[tag] = 1;
+            }
+            else {
+              gatheredTags[tag] += 1;
+            }
+          });
       }
     });
 
@@ -94,6 +101,8 @@ module.exports = function (eleventyConfig: UserConfig) {
   eleventyConfig.addFilter("excerpt", function (content: string) {
     return new ExcerptGenerator().getExcerpt(content, 500);
   });
+
+  eleventyConfig.addPlugin(pluginRss);
 
   return {
     templateFormats: ['md', 'njk', 'jpg', 'png', 'gif'],

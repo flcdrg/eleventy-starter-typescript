@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const lodash_1 = __importDefault(require("lodash"));
 const excerptGenerator_1 = require("./src/_js/excerptGenerator");
+const pluginRss = require("@11ty/eleventy-plugin-rss");
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy({ public: './' });
@@ -16,6 +17,10 @@ module.exports = function (eleventyConfig) {
         // format as dd mmm yyyy
         const formattedDate = date.toLocaleString('default', { weekday: 'long' }) + ' ' + date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear();
         return `<time datetime="${date.toISOString()}">${formattedDate}</time>`;
+    });
+    // filter to exclude 'posts' tag
+    eleventyConfig.addFilter('excludePostsTag', (tags) => {
+        return tags.filter(tag => tag !== 'posts');
     });
     eleventyConfig.addCollection("_recentPosts", (collectionApi) => {
         return collectionApi.getFilteredByTag("posts").sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -66,6 +71,7 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addFilter("excerpt", function (content) {
         return new excerptGenerator_1.ExcerptGenerator().getExcerpt(content, 500);
     });
+    eleventyConfig.addPlugin(pluginRss);
     return {
         templateFormats: ['md', 'njk', 'jpg', 'png', 'gif'],
         dir: {
