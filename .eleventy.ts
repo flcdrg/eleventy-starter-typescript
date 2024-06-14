@@ -1,6 +1,6 @@
-import lodash from 'lodash';
+import _ from 'lodash';
 import { ExcerptGenerator } from './src/_js/excerptGenerator';
-import { Categories, Post, PostsByYear } from './src/app/components/types';
+import { Categories, Post, PostsByYear, PostsByYearPaged } from './src/app/components/types';
 
 import { UserConfig } from '@11ty/eleventy';
 
@@ -35,11 +35,30 @@ module.exports = function (eleventyConfig: UserConfig) {
 
   eleventyConfig.addCollection("_recentPosts", (collectionApi: CollectionApi) => {
 
-    return collectionApi.getFilteredByTag("posts").sort((a: Post, b: Post) => b.date.getTime() - a.date.getTime());
+    return collectionApi.getFilteredByTag("posts")
+      .sort((a: Post, b: Post) => b.date.getTime() - a.date.getTime())
+      // take first 5
+      .slice(0, 5);
   });
 
+  eleventyConfig.addCollection("_postsYears", (collectionApi: CollectionApi) => {
+    // get distinct years
+    return _.chain(collectionApi.getFilteredByTag("posts") as Post[])
+    .map((post) => post.date.getFullYear())
+    .uniq()
+    .orderBy(orders => orders, ['desc'])
+    .value();
+  });
 
   eleventyConfig.addCollection("_postsByYear", (collectionApi: CollectionApi) => {
+    return _.chain(collectionApi.getFilteredByTag("posts") as Post[])
+      .groupBy((post) => post.date.getFullYear() as number)
+      .toPairs()
+      .reverse()
+      .value();
+  });
+
+  eleventyConfig.addCollection("_postsByYearPaged", (collectionApi: CollectionApi) => {
     let postsByKey: { [id: string]: Post[] } = {};
 
     collectionApi.getFilteredByTag("posts").forEach((post: Post) => {
@@ -52,14 +71,14 @@ module.exports = function (eleventyConfig: UserConfig) {
       postsByKey[key].push(post);
     });
 
-    const postsByKeyPaged: PostsByYear = [];
+    const postsByKeyPaged: PostsByYearPaged = [];
 
     for (let key in postsByKey) {
       postsByKey[key].sort((a, b) => b.date.getTime() - a.date.getTime()).reverse();
 
       let totalPages = Math.ceil(postsByKey[key].length / 20);
 
-      lodash.chunk(postsByKey[key], 20).forEach((posts: any, index: number) => {
+      _.chunk(postsByKey[key], 20).forEach((posts: any, index: number) => {
         postsByKeyPaged.push({
           key: key,
           posts: posts,
@@ -73,9 +92,6 @@ module.exports = function (eleventyConfig: UserConfig) {
   });
 
   eleventyConfig.addCollection("categories", (collectionApi: CollectionApi) => {
-
-
-
     const gatheredTags: Categories = {};
 
     collectionApi.getAll().forEach((item) => {
@@ -103,6 +119,23 @@ module.exports = function (eleventyConfig: UserConfig) {
   });
 
   eleventyConfig.addPlugin(pluginRss);
+
+  // https://simplyexplained.com/blog/migrating-this-blog-from-jekyll-to-eleventy/
+  eleventyConfig.addShortcode('post_url', (collection: any, filename: string) => {
+
+    // append .md to filename if it doesn't end with that already
+    if (!filename.endsWith('.md')) {
+      filename += '.md';
+    }
+
+    const found = collection.find((p: any) => p.template.inputPath.indexOf(filename) > -1);
+
+    if (found) {
+      return found.url;
+    } else {
+      throw new Error(`File ${(this as any).page.inputPath} wants to link to ${filename} but it does not exist`);
+    }
+  });
 
   return {
     templateFormats: ['md', 'njk', 'jpg', 'png', 'gif'],

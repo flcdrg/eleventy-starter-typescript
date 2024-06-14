@@ -47,9 +47,13 @@ module.exports = function ({
         <h3>Blog archive</h3>
         <ul>
         ${
-          (collections._postsYears as Array<number>)
-          .map((year: number) => `
-            <li><a href="/${year}">${year}</a></li>
+          (collections._postsByYear as PostsByYear)
+          .map((year: { key: string }) => year.key)
+          // sort by year descending
+          
+          .sort((a: any, b: any) => b.key - a.key)
+          .map((year: any) => `
+            <li><a href="/${year.key}">${year.key}</a></li>
           `)
           .join('')
         }

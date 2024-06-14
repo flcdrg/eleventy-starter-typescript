@@ -1,6 +1,6 @@
 ---
 pagination:
-  data: collections._postsByYear
+  data: collections._postsByYearPaged
   size: 1
   alias: item
 permalink: /{{ item.key | slugify }}/{% if item.pageNumber > 1 %}page/{{ item.pageNumber }}/index.html{% endif %}

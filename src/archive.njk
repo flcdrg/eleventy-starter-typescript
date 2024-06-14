@@ -1,0 +1,17 @@
+---
+layout: base.11ty.js
+title: Index of all posts
+eleventyExcludeFromCollections:
+  - post
+---
+
+Index
+
+    {%- for cat, val in collections._postsByYear -%}
+        {%- if cat !== "posts" -%}
+            <a href="/categories/{{cat}}">{{cat}}</a>
+        {%- endif -%}
+    {%- endfor -%}
+
+End
+

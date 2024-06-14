@@ -7,3 +7,5 @@ date:   2020-06-29
 This post has a random photo in it.
 
 ![A random placeholder image](https://source.unsplash.com/random/600x400)
+
+It links back to the [earlier post]({% post_url collections.posts, '2020/first-post' %})

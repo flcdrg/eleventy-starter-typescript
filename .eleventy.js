@@ -23,9 +23,27 @@ module.exports = function (eleventyConfig) {
         return tags.filter(tag => tag !== 'posts');
     });
     eleventyConfig.addCollection("_recentPosts", (collectionApi) => {
-        return collectionApi.getFilteredByTag("posts").sort((a, b) => b.date.getTime() - a.date.getTime());
+        return collectionApi.getFilteredByTag("posts")
+            .sort((a, b) => b.date.getTime() - a.date.getTime())
+            // take first 5
+            .slice(0, 5);
+    });
+    eleventyConfig.addCollection("_postsYears", (collectionApi) => {
+        // get distinct years
+        return lodash_1.default.chain(collectionApi.getFilteredByTag("posts"))
+            .map((post) => post.date.getFullYear())
+            .uniq()
+            .orderBy(orders => orders, ['desc'])
+            .value();
     });
     eleventyConfig.addCollection("_postsByYear", (collectionApi) => {
+        return lodash_1.default.chain(collectionApi.getFilteredByTag("posts"))
+            .groupBy((post) => post.date.getFullYear())
+            .toPairs()
+            .reverse()
+            .value();
+    });
+    eleventyConfig.addCollection("_postsByYearPaged", (collectionApi) => {
         let postsByKey = {};
         collectionApi.getFilteredByTag("posts").forEach((post) => {
             const key = post.date.getFullYear();
@@ -72,6 +90,20 @@ module.exports = function (eleventyConfig) {
         return new excerptGenerator_1.ExcerptGenerator().getExcerpt(content, 500);
     });
     eleventyConfig.addPlugin(pluginRss);
+    // https://simplyexplained.com/blog/migrating-this-blog-from-jekyll-to-eleventy/
+    eleventyConfig.addShortcode('post_url', (collection, filename) => {
+        // append .md to filename if it doesn't end with that already
+        if (!filename.endsWith('.md')) {
+            filename += '.md';
+        }
+        const found = collection.find((p) => p.template.inputPath.indexOf(filename) > -1);
+        if (found) {
+            return found.url;
+        }
+        else {
+            throw new Error(`File ${this.page.inputPath} wants to link to ${filename} but it does not exist`);
+        }
+    });
     return {
         templateFormats: ['md', 'njk', 'jpg', 'png', 'gif'],
         dir: {
