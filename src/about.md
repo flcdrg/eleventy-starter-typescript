@@ -1,6 +1,6 @@
 ---
 layout: base.11ty.js
-title: About David
+title: About Page
 eleventyExcludeFromCollections:
   - post
 ---
