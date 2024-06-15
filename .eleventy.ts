@@ -58,6 +58,13 @@ module.exports = function (eleventyConfig: UserConfig) {
       .value();
   });
 
+  eleventyConfig.addCollection("_postsReversed", (collectionApi: CollectionApi) => {
+    return _.chain(collectionApi.getFilteredByTag("posts") as Post[])
+      .orderBy((post) => post.date.getTime(), ['desc'])
+      .value();
+  });
+
+
   eleventyConfig.addCollection("_postsByYearPaged", (collectionApi: CollectionApi) => {
     let postsByKey: { [id: string]: Post[] } = {};
 

@@ -43,6 +43,11 @@ module.exports = function (eleventyConfig) {
             .reverse()
             .value();
     });
+    eleventyConfig.addCollection("_postsReversed", (collectionApi) => {
+        return lodash_1.default.chain(collectionApi.getFilteredByTag("posts"))
+            .orderBy((post) => post.date.getTime(), ['desc'])
+            .value();
+    });
     eleventyConfig.addCollection("_postsByYearPaged", (collectionApi) => {
         let postsByKey = {};
         collectionApi.getFilteredByTag("posts").forEach((post) => {

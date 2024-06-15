@@ -5,13 +5,10 @@ eleventyExcludeFromCollections:
   - post
 ---
 
-Index
+<h2>Complete index of posts</h2>
 
-    {%- for cat, val in collections._postsByYear -%}
-        {%- if cat !== "posts" -%}
-            <a href="/categories/{{cat}}">{{cat}}</a>
-        {%- endif -%}
-    {%- endfor -%}
-
-End
-
+<ul>
+    {% for post in collections.posts -%}
+      <li>{{ post.date | formatDate | safe }} <a href="{{ post.url }}">{{ post.data.title }}</a></li>
+    {% endfor %}
+</ul>
