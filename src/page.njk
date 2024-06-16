@@ -1,7 +1,9 @@
 ---
-title: Available Products
+title: Posts
+layout: base.11ty.js
+permalink: "page{{ pagination.pageNumber + 1 }}/index.html"
 pagination:
-  data: collections._postsReversed
+  data: collections.posts
   size: 5
   alias: posts
 ---

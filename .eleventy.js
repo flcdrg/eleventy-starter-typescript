@@ -23,10 +23,11 @@ module.exports = function (eleventyConfig) {
         return tags.filter(tag => tag !== 'posts');
     });
     eleventyConfig.addCollection("_recentPosts", (collectionApi) => {
-        return collectionApi.getFilteredByTag("posts")
+        const posts = collectionApi.getFilteredByTag("posts");
+        return posts
             .sort((a, b) => b.date.getTime() - a.date.getTime())
             // take first 5
-            .slice(0, 5);
+            .slice(0, 5 - (posts.length % 5));
     });
     eleventyConfig.addCollection("_postsYears", (collectionApi) => {
         // get distinct years
@@ -44,8 +45,11 @@ module.exports = function (eleventyConfig) {
             .value();
     });
     eleventyConfig.addCollection("_postsReversed", (collectionApi) => {
-        return lodash_1.default.chain(collectionApi.getFilteredByTag("posts"))
+        const posts = collectionApi.getFilteredByTag("posts");
+        return lodash_1.default.chain(posts)
             .orderBy((post) => post.date.getTime(), ['desc'])
+            // take multiple of 5
+            .slice(0, 5 * Math.floor(posts.length / 5))
             .value();
     });
     eleventyConfig.addCollection("_postsByYearPaged", (collectionApi) => {

@@ -35,10 +35,11 @@ module.exports = function (eleventyConfig: UserConfig) {
 
   eleventyConfig.addCollection("_recentPosts", (collectionApi: CollectionApi) => {
 
-    return collectionApi.getFilteredByTag("posts")
+    const posts = collectionApi.getFilteredByTag("posts");
+    return posts
       .sort((a: Post, b: Post) => b.date.getTime() - a.date.getTime())
       // take first 5
-      .slice(0, 5);
+      .slice(0, 5 - (posts.length % 5));
   });
 
   eleventyConfig.addCollection("_postsYears", (collectionApi: CollectionApi) => {
@@ -59,8 +60,11 @@ module.exports = function (eleventyConfig: UserConfig) {
   });
 
   eleventyConfig.addCollection("_postsReversed", (collectionApi: CollectionApi) => {
-    return _.chain(collectionApi.getFilteredByTag("posts") as Post[])
+    const posts = collectionApi.getFilteredByTag("posts") as Post[];
+    return _.chain(posts)
       .orderBy((post) => post.date.getTime(), ['desc'])
+      // take multiple of 5
+      .slice(0, 5 * Math.floor(posts.length / 5))
       .value();
   });
 
