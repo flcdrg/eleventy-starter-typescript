@@ -1,0 +1,29 @@
+---
+title: Dave's Daydreams
+layout: base.11ty.js
+pagination:
+  data: collections.posts
+  size: 2
+  alias: posts
+  reverse: true
+---
+
+<h1>Dave's Daydreams</h1>
+
+{% for post in posts %}
+
+{{ post.date | formatDate | safe }}
+
+<h2><a href="{{ post.url | url }}">{{ post.data.title }}</a></h2>
+
+{{ post.content | safe }}
+
+{% endfor %}
+
+{% set totalPages = pagination.links.length %}
+{% set current    = pagination.pageNumber + 1 %}
+
+<nav>
+    {% if pagination.href.previous %}<a href="{{ pagination.href.previous }}">Previous</a>{% endif %}
+    {% if pagination.href.next %}<a href="{{ pagination.href.next }}">Next</a>{% endif %}
+</nav>

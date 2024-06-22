@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { ExcerptGenerator } from './src/_js/excerptGenerator';
-import { Categories, Post, PostsByYear, PostsByYearPaged } from './src/app/components/types';
+import { Categories, Pagination, Post, PostsByYear, PostsByYearPaged } from './src/app/components/types';
 
 import { UserConfig } from '@11ty/eleventy';
 
@@ -122,6 +122,29 @@ module.exports = function (eleventyConfig: UserConfig) {
     });
 
     return gatheredTags;
+  });
+
+  eleventyConfig.addFilter("hashIt", function(array: Array<any>) {
+    const hash: {[id:number]: any} = {};
+    for (let i = 0; i < array.length; i++) {
+      hash[i+1] = array[i];
+    } 
+
+    return hash;
+  });
+
+  eleventyConfig.addFilter("paginate", function (pagination: Pagination) {
+    const maxPage = pagination.pages.length;
+
+    const currentPage = pagination.pageNumber;
+    console.log('currentPage', currentPage);
+
+    const startPage = 5 * Math.floor((currentPage - 1) / 5) + 1;
+    console.log('startPage', startPage);
+    const pages = pagination.pages.slice(startPage, currentPage + 5);
+
+    return pages;
+
   });
 
   // https://www.martingunnarsson.com/posts/eleventy-excerpts/

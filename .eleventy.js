@@ -94,6 +94,22 @@ module.exports = function (eleventyConfig) {
         });
         return gatheredTags;
     });
+    eleventyConfig.addFilter("hashIt", function (array) {
+        const hash = {};
+        for (let i = 0; i < array.length; i++) {
+            hash[i + 1] = array[i];
+        }
+        return hash;
+    });
+    eleventyConfig.addFilter("paginate", function (pagination) {
+        const maxPage = pagination.pages.length;
+        const currentPage = pagination.pageNumber;
+        console.log('currentPage', currentPage);
+        const startPage = 5 * Math.floor((currentPage - 1) / 5) + 1;
+        console.log('startPage', startPage);
+        const pages = pagination.pages.slice(startPage, currentPage + 5);
+        return pages;
+    });
     // https://www.martingunnarsson.com/posts/eleventy-excerpts/
     eleventyConfig.addFilter("excerpt", function (content) {
         return new excerptGenerator_1.ExcerptGenerator().getExcerpt(content, 500);

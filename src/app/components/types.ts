@@ -17,3 +17,22 @@ export type PostsByYearPaged = Array<{
 export type Categories = {
   [id: string]: number;
 };
+
+export type Pagination = {
+  items: Array<any>;
+  pageNumber: number;
+  hrefs: Array<string>;
+  href: {
+    next: string;
+    previous: string;
+    first: string;
+    last: string;
+  };
+  pages: Array<any>;
+  page: {
+    next: any;
+    previous: any;
+    first: any;
+    last: any;
+  };
+}
