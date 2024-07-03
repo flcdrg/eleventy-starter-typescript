@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "module": "CommonJS",
         "rootDir": ".",
         "outDir": "../../_js/layouts",
         "composite": true
